@@ -1,20 +1,26 @@
 package lexer
 
 import (
-	"seqa/token"
 	"testing"
+	"seqa/token"
 )
 
 func TestNextToken(t *testing.T) {
 	//	input := `=+(){},;`
-	input := `aa->bb
+	input := `- aa->bb
 bb < - cc
-- cc-->dd`
+- cc-->dd
+- ee<--ff :hello world
+- ee<--ff :   hello world
+- zz: FOO BAR
+# comment here
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
+		{token.BULLET, "-"},		
 		{token.IDENT, "aa"},
 		{token.LINE, "-"},
 		{token.GT, ">"},
@@ -30,6 +36,27 @@ bb < - cc
 		{token.LINE, "-"},
 		{token.GT, ">"},
 		{token.IDENT, "dd"},
+		{token.CRLF, "\n"},
+		{token.BULLET, "-"},
+		{token.IDENT, "ee"},
+		{token.LT, "<"},
+		{token.LINE, "-"},
+		{token.IDENT, "ff"},
+		{token.STRING, "hello world"},
+		{token.CRLF, "\n"},		
+		{token.BULLET, "-"},
+		{token.IDENT, "ee"},
+		{token.LT, "<"},
+		{token.LINE, "-"},
+		{token.IDENT, "ff"},
+		{token.STRING, "hello world"},
+		{token.CRLF, "\n"},
+		{token.BULLET, "-"},
+		{token.IDENT, "zz"},
+		{token.STRING, "FOO BAR"},
+		{token.CRLF, "\n"},				
+		{token.STRING, "comment here"},		
+
 	}
 
 	l := New(input)

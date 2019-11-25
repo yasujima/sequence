@@ -57,3 +57,12 @@ A:Asan               B:Bsan             C
 
 幅は、コメント長を調整し計算するようにしたい。
 
+
+content = <statement>*
+statement = "-" <<nodes> ":" <description> | <comment>
+comment = "#" <descrption>
+nodes = <node> | <node> <arrow> <node>
+node = ident
+arrow = "<"{0,1} + "-"{1..} + ">"{0,1}
+
+

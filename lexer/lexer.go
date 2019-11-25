@@ -3,15 +3,15 @@ package lexer
 import "seqa/token"
 
 type Lexer struct {
-	input        string
-	position     int
+	input string
+	position int
 	readPosition int
-	istop        bool
-	ch           byte
+	istop bool
+	ch byte
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input: input}
+	l := &Lexer{input:input}
 	l.readChar()
 	l.istop = true
 	return l
@@ -48,7 +48,12 @@ func (l *Lexer) NextToken() token.Token {
 	case '<':
 		tok = newToken(token.LT, l.ch)
 	case ':':
-		tok = newToken(token.COLON, l.ch)
+		//tok = newToken(token.COLON, l.ch)
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
+	case '#':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
 	case '\r':
 		tok = newToken(token.CRLF, l.ch)
 	case '\n':
@@ -71,7 +76,7 @@ func (l *Lexer) NextToken() token.Token {
 }
 
 func (l *Lexer) skipWhitespace() {
-	for l.ch == ' ' || l.ch == '\t' { //|| l.ch == '\n' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\t' {//|| l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
 	}
 }
@@ -98,4 +103,17 @@ func (l *Lexer) peekChar() byte {
 	} else {
 		return l.input[l.readPosition]
 	}
+}
+
+func (l *Lexer) readString() string {
+	l.readChar()	
+	l.skipWhitespace()
+	position := l.position
+	for {
+		l.readChar()
+		if l.peekChar() == 0 || l.peekChar() == '\r' || l.peekChar() == '\n' {
+			break
+		}
+	}
+	return l.input[position:l.readPosition]
 }
