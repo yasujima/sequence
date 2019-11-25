@@ -6,14 +6,14 @@ type Lexer struct {
 	input        string
 	position     int
 	readPosition int
-	istop        bool
+	isNewLine    bool
 	ch           byte
 }
 
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
 	l.readChar()
-	l.istop = true
+	l.isNewLine = true
 	return l
 }
 
@@ -25,7 +25,7 @@ func (l *Lexer) readChar() {
 	}
 	l.position = l.readPosition
 	l.readPosition += 1
-	l.istop = false
+	l.isNewLine = false
 }
 
 func (l *Lexer) NextToken() token.Token {
@@ -35,7 +35,7 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '-':
-		if l.istop {
+		if l.isNewLine {
 			tok = newToken(token.BULLET, l.ch)
 		} else {
 			for l.peekChar() == '-' {
@@ -70,7 +70,7 @@ func (l *Lexer) NextToken() token.Token {
 
 	l.readChar()
 	if tok.Type == token.CRLF {
-		l.istop = true
+		l.isNewLine = true
 	}
 	return tok
 }
