@@ -9,7 +9,7 @@ func TestNextToken(t *testing.T) {
 	//	input := `=+(){},;`
 	input := `- aa->bb
 bb < - cc
-- cc-->dd
+- cc==>dd
 - ee<--ff :hello world
 - ee<--ff :   hello world
 - zz: FOO BAR
@@ -33,7 +33,7 @@ bb < - cc
 		{token.CRLF, "\n"},
 		{token.BULLET, "-"},
 		{token.IDENT, "cc"},
-		{token.LINE, "-"},
+		{token.LINE, "="},
 		{token.GT, ">"},
 		{token.IDENT, "dd"},
 		{token.CRLF, "\n"},

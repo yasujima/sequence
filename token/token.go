@@ -17,8 +17,8 @@ const (
 	CRLF   = "CRLF"
 
 	COLON  = ":"
-	BULLET = "-"
-	LINE   = "-"
+	BULLET = "BULLET"
+	LINE   = "LINE"
 	LT     = "<"
 	GT     = ">"
 	HASH   = "#"

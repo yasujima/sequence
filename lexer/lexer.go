@@ -34,9 +34,12 @@ func (l *Lexer) NextToken() token.Token {
 	l.skipWhitespace()
 
 	switch l.ch {
+	case '=':
+		fallthrough
 	case '-':
 		newline := l.isNewLine
-		for l.peekChar() == '-' {
+		ch := l.ch
+		for l.peekChar() == ch {
 			l.readChar()
 		}
 		if newline {
