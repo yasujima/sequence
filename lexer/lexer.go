@@ -35,12 +35,13 @@ func (l *Lexer) NextToken() token.Token {
 
 	switch l.ch {
 	case '-':
-		if l.isNewLine {
+		newline := l.isNewLine
+		for l.peekChar() == '-' {
+			l.readChar()
+		}
+		if newline {
 			tok = newToken(token.BULLET, l.ch)
 		} else {
-			for l.peekChar() == '-' {
-				l.readChar()
-			}
 			tok = newToken(token.LINE, l.ch)
 		}
 	case '>':
@@ -48,14 +49,12 @@ func (l *Lexer) NextToken() token.Token {
 	case '<':
 		tok = newToken(token.LT, l.ch)
 	case ':':
-		//tok = newToken(token.COLON, l.ch)
-		tok.Type = token.STRING
-		tok.Literal = l.readString()
+		fallthrough
 	case '#':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
 	case '\r':
-		tok = newToken(token.CRLF, l.ch)
+		fallthrough
 	case '\n':
 		tok = newToken(token.CRLF, l.ch)
 	default:
