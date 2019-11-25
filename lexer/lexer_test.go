@@ -1,8 +1,8 @@
 package lexer
 
 import (
-	"testing"
 	"seqa/token"
+	"testing"
 )
 
 func TestNextToken(t *testing.T) {
@@ -20,7 +20,7 @@ bb < - cc
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
-		{token.BULLET, "-"},		
+		{token.BULLET, "-"},
 		{token.IDENT, "aa"},
 		{token.LINE, "-"},
 		{token.GT, ">"},
@@ -43,7 +43,7 @@ bb < - cc
 		{token.LINE, "-"},
 		{token.IDENT, "ff"},
 		{token.STRING, "hello world"},
-		{token.CRLF, "\n"},		
+		{token.CRLF, "\n"},
 		{token.BULLET, "-"},
 		{token.IDENT, "ee"},
 		{token.LT, "<"},
@@ -54,9 +54,8 @@ bb < - cc
 		{token.BULLET, "-"},
 		{token.IDENT, "zz"},
 		{token.STRING, "FOO BAR"},
-		{token.CRLF, "\n"},				
-		{token.STRING, "comment here"},		
-
+		{token.CRLF, "\n"},
+		{token.STRING, "comment here"},
 	}
 
 	l := New(input)
