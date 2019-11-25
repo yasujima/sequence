@@ -3,15 +3,15 @@ package lexer
 import "seqa/token"
 
 type Lexer struct {
-	input string
-	position int
+	input        string
+	position     int
 	readPosition int
-	istop bool
-	ch byte
+	istop        bool
+	ch           byte
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input:input}
+	l := &Lexer{input: input}
 	l.readChar()
 	l.istop = true
 	return l
@@ -71,7 +71,7 @@ func (l *Lexer) NextToken() token.Token {
 }
 
 func (l *Lexer) skipWhitespace() {
-	for l.ch == ' ' || l.ch == '\t' {//|| l.ch == '\n' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\t' { //|| l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
 	}
 }

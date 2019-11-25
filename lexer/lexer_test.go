@@ -1,8 +1,8 @@
 package lexer
 
 import (
-	"testing"
 	"seqa/token"
+	"testing"
 )
 
 func TestNextToken(t *testing.T) {
@@ -29,7 +29,7 @@ bb < - cc
 		{token.IDENT, "cc"},
 		{token.LINE, "-"},
 		{token.GT, ">"},
-		{token.IDENT, "dd"},		
+		{token.IDENT, "dd"},
 	}
 
 	l := New(input)
