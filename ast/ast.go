@@ -45,10 +45,10 @@ func (cs *CommentStatement) String() string {return cs.Description}
 
 type ArrowStatement struct {
 	Token token.Token
-	LeftNode Node
-	Line Node
-	RightNode Node
-	Comment Statement
+	LeftNode ArrowNode
+	Line LineNode
+	RightNode ArrowNode
+	Comment CommentStatement
 }
 
 func (as *ArrowStatement) TokenLiteral() string {return as.Token.Literal}
@@ -65,10 +65,10 @@ func (as *ArrowStatement) String() string {
 }
 
 type Context struct {
-	Header Statement
+	Header CommentStatement
 	Nodes []Node
 	Statements []Statement
-	Footer Statement	
+	Footer CommentStatement	
 }
 
 func (c *Context) TokenLiteral() string {
@@ -81,7 +81,7 @@ func (c *Context) String() string {
 	//ここでNodeや長さを理解し構築する
 	out.WriteString(c.Header.String())
 	out.WriteString("\n")
-	l := 30
+	l := 50
 	for _, n := range c.Nodes {
 		out.WriteString(n.String())
 		spaces := l - len(n.String())
