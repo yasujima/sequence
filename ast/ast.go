@@ -6,9 +6,76 @@ import (
 	"strings"
 )
 
+type Nodes struct {
+	store []string
+	keys map[string]int16
+}
+
+func NewNodes() *Nodes {
+	ks := make(map[string]int16)
+	return &Nodes{keys: ks}
+}
+
+func (ns *Nodes) String(l int) string {
+	var out bytes.Buffer
+	
+	for _, n := range ns.store {
+		if l < len(n) {
+			out.WriteString(n[:l])
+		} else {
+			out.WriteString(n)
+			out.WriteString(strings.Repeat(" ", l - len(n)))
+		}
+
+	}
+
+	return out.String()
+}
+
+func (ns *Nodes) Size() int16 {
+	return int16(len(ns.store))
+}
+
+func (ns *Nodes) Set(name string, comment string) (Node, int16) {
+	index, ok := ns.keys[name]
+	if ok {
+		return &ActorNode{
+			Comment: CommentStatement{
+				Token: token.Token{Type:token.COLON},
+				Description: comment,
+			},
+		}, index
+	} else {
+		ns.store = append(ns.store, name)
+		ns.keys[name] = int16(len(ns.store))-1
+		return &ActorNode{
+			Comment: CommentStatement{
+				Token: token.Token{Type:token.COLON},
+				Description: comment,
+			},},
+			ns.keys[name]
+	}
+}
+
 type Node interface {
 	TokenLiteral() string
 	String() string
+}
+
+type ActorNode struct {
+	Token token.Token
+	Comment CommentStatement
+}
+
+func (an *ActorNode) TokenLiteral() string {return an.Token.Literal}
+func (an *ActorNode) String() string {
+	var out bytes.Buffer
+
+	out.WriteString(an.Token.Literal)
+	out.WriteString(" ")
+	out.WriteString(an.Comment.String())
+
+	return out.String()
 }
 
 type ArrowNode struct {
@@ -66,7 +133,7 @@ func (as *ArrowStatement) String() string {
 
 type Context struct {
 	Header CommentStatement
-	Nodes []Node
+	Nodes *Nodes
 	Statements []Statement
 	Footer CommentStatement	
 }
@@ -81,18 +148,14 @@ func (c *Context) String() string {
 	//ここでNodeや長さを理解し構築する
 	out.WriteString(c.Header.String())
 	out.WriteString("\n")
-	l := 50
-	for _, n := range c.Nodes {
-		out.WriteString(n.String())
-		spaces := l - len(n.String())
-		out.WriteString(strings.Repeat(" ", spaces))
-	}
+	l := 10
+	out.WriteString(c.Nodes.String(l))
 	for _, n := range c.Statements {
 		//ここにも人手間
 		out.WriteString(n.String())
 	}
 	out.WriteString("\n")
-	//	out.WriteString(c.Footer.String())
+	out.WriteString(c.Footer.String())
 
 	return out.String()
 }

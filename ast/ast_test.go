@@ -11,7 +11,12 @@ func TestString (t *testing.T) {
 			Token: token.Token{Type: token.STRING, Literal: "#"},
 			Description: "this is header description",
 		},
-		Nodes: []Node{
+		Footer: CommentStatement{
+			Token: token.Token{Type: token.STRING, Literal: "#"},
+			Description: "this is footer description",
+		},
+		
+		Statements : []Statement{
 			&ArrowStatement{
 				Token: token.Token{Type: token.BULLET, Literal: "-"},
 				LeftNode: ArrowNode{
@@ -30,10 +35,14 @@ func TestString (t *testing.T) {
 				},
 			},
 		},
-		Statements : []Statement{},
 	}
 
-	t.Logf("context test .... %q", context.String())
+	ns := NewNodes()
+	context.Nodes = ns
+	context.Nodes.Set("ABCDE", "this is aaa")
+	context.Nodes.Set("VW", "this is bbb")	
+
+	t.Logf("context test ....\n%s", context.String())
 	
 }
 		
